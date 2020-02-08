@@ -5,6 +5,7 @@
  */
 package sslencript;
 
+import Socket.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,25 +54,22 @@ public class SSLEncript {
     private static final String CERTIFICATE_NAME = "keystore.key";
 
     public static void main(String[] args) {
-
-        try {
-            
-            KeyStore keyStore = SSLEvent.createKeyStore(CERTIFICATE_NAME, CERTIFICATE_PASS);
-            Certificate certificate = keyStore.getCertificate(CERTIFICATE_ALIAS);
-            byte[] texto = enviar("Hola Mundo", certificate);
-            client cliente = new client();
-            cliente.sendMessage(bytesToString(texto));
-            
-            Key key = keyStore.getKey(CERTIFICATE_ALIAS, CERTIFICATE_PASS.toCharArray());
-            String text =recivir(texto, key);
-
-            System.out.println(text);
-            
-           
-
-        } catch (Exception ex) {
-            Logger.getLogger(SSLEncript.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        server.getInstance();
+//        try {
+//            KeyStore keyStore = SSLEvent.createKeyStore(CERTIFICATE_NAME, CERTIFICATE_PASS);
+//            Certificate certificate = keyStore.getCertificate(CERTIFICATE_ALIAS);
+//            byte[] texto = enviar("Hola Mundo", certificate);
+//            
+//            Key key = keyStore.getKey(CERTIFICATE_ALIAS, CERTIFICATE_PASS.toCharArray());
+//            String text =recivir(texto, key);
+//
+//            System.out.println(text);
+//            
+//           
+//
+//        } catch (Exception ex) {
+//            Logger.getLogger(SSLEncript.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 
@@ -85,9 +83,11 @@ public class SSLEncript {
         return null;
     }
 
-    public static String recivir(byte[] texto, Key key) {
+    public static String recivir(String texto) {
         try {
-            String text2 = Decrypt(texto, key);
+            KeyStore keyStore = SSLEvent.createKeyStore(CERTIFICATE_NAME, CERTIFICATE_PASS);
+            Key key = keyStore.getKey(CERTIFICATE_ALIAS, CERTIFICATE_PASS.toCharArray());
+            String text2 = Decrypt(stringToBytes(texto), key);
             return text2;
         } catch (Exception ex) {
             Logger.getLogger(SSLEncript.class.getName()).log(Level.SEVERE, null, ex);
