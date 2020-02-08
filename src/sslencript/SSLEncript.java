@@ -55,9 +55,12 @@ public class SSLEncript {
     public static void main(String[] args) {
 
         try {
+            
             KeyStore keyStore = SSLEvent.createKeyStore(CERTIFICATE_NAME, CERTIFICATE_PASS);
             Certificate certificate = keyStore.getCertificate(CERTIFICATE_ALIAS);
             byte[] texto = enviar("Hola Mundo", certificate);
+            client cliente = new client();
+            cliente.sendMessage(bytesToString(texto));
             
             Key key = keyStore.getKey(CERTIFICATE_ALIAS, CERTIFICATE_PASS.toCharArray());
             String text =recivir(texto, key);
